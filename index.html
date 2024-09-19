@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> News</title>
+    <link rel="stylesheet" href="style.css">
+    <script  src="hi.js"></script>
+
+     <link rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" 
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    
+</head>
+
+<body>
+
+    <header>
+        
+        <div class= "logo" src="C:\Users\shukl\3D Objects\refresher\public\logo.png" alt="#">
+            <h1> News</h1>
+        </div>
+
+        
+        <div class="menu-btn">
+            <span class="menu-icon"><i class="fa-solid fa-bars"></i></span>
+        </div>
+
+        <nav class="desktop ">
+          <ul>
+          
+            <form id="searchForm">
+              <input type="text" placeholder="Type to search..." id="searchInput" />
+              <span> <i class="fa-solid fa-search"></i></span>
+            </form>
+            <li onclick="Search('food')">Food</li>
+            <li onclick="Search('movies')">Movies</li>
+          
+          </ul>
+        </nav>
+    </header>
+                     
+    <!-- Mobile Dropdown Menu -->
+    <div class="dropdown-menu">
+        <ul>
+          <div class="inputSearch">
+            <form id="searchFormMobile" id="searchInputMobile">
+              <input type="text" placeholder="Type to search..." />
+              <span> <i class="fa-solid fa-search"></i></span>
+            </div>
+            </form>
+            <li onclick="Search('ipl')">IPL </li>
+            <li onclick="Search('tech')">Tech</li>
+            <li onclick="Search('food')">Food</li>
+            <li onclick="Search('movies')">Movies</li>
+            <li onclick="Search('business')">Business</li>
+        </ul>
+    </div>
+
+    <!---main-->
+    <main></main> 
+
+
+
+ 
+        
+      
+      
+</body>                  
+</html>
