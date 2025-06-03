@@ -29,28 +29,26 @@
         </div>
 
         <nav class="desktop ">
-          <ul>
-          
             <form id="searchForm">
-              <input type="text" placeholder="Type to search..." id="searchInput" />
-              <span> <i class="fa-solid fa-search"></i></span>
+                <input type="text" placeholder="Type to search..." id="searchInput" />
+                <button type="submit" style="display:none"></button>
+                <span><i class="fa-solid fa-search"></i></span>
             </form>
-            <li onclick="Search('food')">Food</li>
-            <li onclick="Search('movies')">Movies</li>
-          
-          </ul>
+            <ul>
+                <li onclick="Search('food')">Food</li>
+                <li onclick="Search('movies')">Movies</li>
+            </ul>
         </nav>
     </header>
                      
     <!-- Mobile Dropdown Menu -->
     <div class="dropdown-menu">
+        <form id="searchFormMobile">
+            <input type="text" placeholder="Type to search..." id="searchInputMobile" />
+            <button type="submit" style="display:none"></button>
+            <span><i class="fa-solid fa-search"></i></span>
+        </form>
         <ul>
-          <div class="inputSearch">
-            <form id="searchFormMobile" id="searchInputMobile">
-              <input type="text" placeholder="Type to search..." />
-              <span> <i class="fa-solid fa-search"></i></span>
-            </div>
-            </form>
             <li onclick="Search('ipl')">IPL </li>
             <li onclick="Search('tech')">Tech</li>
             <li onclick="Search('food')">Food</li>

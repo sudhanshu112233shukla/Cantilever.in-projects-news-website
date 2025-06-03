@@ -1,23 +1,21 @@
 // API configuration
 const API_KEY = "pub_535257d598641dfa62023c12a1c8bc037763b";
-const baseURL = `https://newsdata.io/api/1/news?apikey=${API_KEY}&q=everything`;
+const baseURL = `https://newsdata.io/api/1/latest?apikey=${API_KEY}`;
 
-// Function to fetch data from the API
-async function fetchData(query) {
+// Function to fetch data from the API (with pagination support)
+async function fetchData(query = '', page = '') {
     try {
-        const res = await fetch(`${baseURL}&q=${query}`);  // Corrected fetch call
-        
-        // Check if the response is OK (status code 200-299)
+        let url = `${baseURL}`;
+        if (query) url += `&q=${encodeURIComponent(query)}`;
+        if (page) url += `&page=${encodeURIComponent(page)}`;
+        url += `&language=en&size=10`;
+        const res = await fetch(url);
         if (!res.ok) {
             throw new Error(`Error: ${res.status} - ${res.statusText}`);
         }
-        
         const data = await res.json();
-
         // Log the full data to the console
         console.log('API Data:', data);
-
-        // Ensure that data is returned as expected
         if (data.results) {
             return data;
         } else {
@@ -29,7 +27,7 @@ async function fetchData(query) {
 }
 
 // Function to render fetched news articles
-function renderMain(arr) {
+function renderMain(arr, append = false) {
     let mainHTML = '';
     arr.forEach(article => {
         if (article.title && article.link) {
@@ -51,8 +49,12 @@ function renderMain(arr) {
             `;
         }
     });
-
-    document.querySelector("main").innerHTML = mainHTML;
+    const main = document.querySelector("main");
+    if (append) {
+        main.insertAdjacentHTML('beforeend', mainHTML);
+    } else {
+        main.innerHTML = mainHTML;
+    }
 }
 
 // Mobile menu toggle
@@ -75,13 +77,16 @@ if (searchBtn) {
     searchBtn.addEventListener("submit", async (e) => {
         e.preventDefault();
         const query = searchInput.value;
-        if (query) {
-            const data = await fetchData(query);
-            if (data && data.results) {
-                renderMain(data.results);
-            } else {
-                console.error("No results found");
-            }
+        lastQuery = query;
+        currentPage = '';
+        // Always fetch, even if query is empty
+        const data = await fetchData(query);
+        if (data && data.results) {
+            renderMain(data.results);
+            renderPagination(data.nextPage);
+            currentPage = data.nextPage || '';
+        } else {
+            console.error("No results found");
         }
     });
 }
@@ -90,26 +95,56 @@ if (searchBtnMobile) {
     searchBtnMobile.addEventListener("submit", async (e) => {
         e.preventDefault();
         const query = searchInputMobile.value;
-        if (query) {
-            const data = await fetchData(query);
-            if (data && data.results) {
-                renderMain(data.results);
-            } else {
-                console.error("No results found");
-            }
+        lastQuery = query;
+        currentPage = '';
+        // Always fetch, even if query is empty
+        const data = await fetchData(query);
+        if (data && data.results) {
+            renderMain(data.results);
+            renderPagination(data.nextPage);
+            currentPage = data.nextPage || '';
+        } else {
+            console.error("No results found");
         }
     });
 }
 
-// Initial fetch to load default news
-async function Search(query) {
+// Pagination controls
+let currentPage = '';
+let lastQuery = '';
+
+function renderPagination(nextPage) {
+    const main = document.querySelector('main');
+    let paginationHTML = '';
+    if (nextPage) {
+        paginationHTML += `<button id="loadMoreBtn">Load More</button>`;
+    }
+    main.insertAdjacentHTML('beforeend', paginationHTML);
+    if (nextPage) {
+        document.getElementById('loadMoreBtn').onclick = async () => {
+            const data = await fetchData(lastQuery, nextPage);
+            if (data && data.results) {
+                renderMain(data.results, true); // append
+                renderPagination(data.nextPage);
+                currentPage = data.nextPage || '';
+            }
+        };
+    }
+}
+
+// Initial fetch to load latest news
+async function Search(query = '') {
+    lastQuery = query;
+    currentPage = '';
     const data = await fetchData(query);
     if (data && data.results) {
         renderMain(data.results);
+        renderPagination(data.nextPage);
+        currentPage = data.nextPage || '';
     } else {
         console.error("No results found");
     }
 }
 
 // Call Search to fetch and log all data on page load
-Search('everything');
+Search();
